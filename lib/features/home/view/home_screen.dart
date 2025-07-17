@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('Shop'),
           actions: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.shopping_cart)),
+            IconButton(onPressed: () => Navigator.pushNamed(context, '/shopping_cart'), icon: Icon(Icons.shopping_cart)),
           ],
         ),
         body: BlocBuilder<HomeCubit, HomeState>(
