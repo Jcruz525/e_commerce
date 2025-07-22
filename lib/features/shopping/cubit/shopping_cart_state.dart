@@ -1,12 +1,26 @@
 part of 'shopping_cart_cubit.dart';
 
-class ShoppingCartState extends Equatable {
-  final List<CartItem> items;
 
-  const ShoppingCartState({this.items = const []});
+class CartFakeStoreState {
+  final List<ProductModel> products;
+  final bool isLoading;
+  final String? error;
 
-  @override
-  List<Object> get props => [items];
+  const CartFakeStoreState({
+    this.products = const [],
+    this.isLoading = false,
+    this.error,
+  });
+
+  CartFakeStoreState copyWith({
+    List<ProductModel>? products,
+    bool? isLoading,
+    String? error,
+  }) {
+    return CartFakeStoreState(
+      products: products ?? this.products,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
+    );
+  }
 }
-
-final class ShoppingCartInitial extends ShoppingCartState {}

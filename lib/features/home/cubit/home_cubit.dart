@@ -1,21 +1,20 @@
+import 'package:e_commerce/core/services/product_service.dart';
+import 'package:e_commerce/data/models/product_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'home_state.dart';
-import '../../../data/models/product_model.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit() : super(HomeInitial());
+  final ProductService productService;
 
-  void loadProducts() async {
-    emit(HomeLoading());
+  HomeCubit(this.productService) : super(HomeInitial());
+
+  Future<void> loadProducts() async {
     try {
-final products = [
-        ProductModel(id: 1, name: 'Product 1', price: 29.99, imageUrl: 'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg'),
-        ProductModel(id: 2, name: 'Product 2', price: 49.99, imageUrl: 'https://picsum.photos/200/300'),
-        ProductModel(id: 3, name: 'Product 3', price: 19.99, imageUrl: 'https://picsum.photos/200/300'),
-      ];
+      emit(HomeLoading());
+      final List<ProductModel> products = await productService.fetchAllProducts();
       emit(HomeLoaded(products));
     } catch (e) {
-      emit(HomeError('Failed to load products.'));
+      emit(HomeError('Failed to load products: $e'));
     }
   }
 }

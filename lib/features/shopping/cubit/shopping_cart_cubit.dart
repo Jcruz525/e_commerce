@@ -1,21 +1,23 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:e_commerce/core/services/product_service.dart';
+import 'package:e_commerce/data/models/product_model.dart';
 part 'shopping_cart_state.dart';
 
-class CartItem {
-  final String id;
-  final String name;
-  final double price;
+class CartFakeStoreCubit extends Cubit<CartFakeStoreState> {
+  final ProductService _service;
 
-  CartItem({
-    required this.id,
-    required this.name,
-    required this.price,
-  });
-}
+  CartFakeStoreCubit(this._service) : super(const CartFakeStoreState());
 
-class ShoppingCartCubit extends Cubit<ShoppingCartState> {
-  ShoppingCartCubit() : super(ShoppingCartInitial());
- 
+  void fetchProducts() async {
+    emit(state.copyWith(isLoading: true, error: null));
+
+    try {
+      final products = await _service.fetchAllProducts();
+      emit(state.copyWith(products: products, isLoading: false));
+    } catch (e) {
+      emit(state.copyWith(error: e.toString(), isLoading: false));
+    }
+  }
+  void updateItems(List<ProductModel> items) => emit(state.copyWith(products: items));
+  
 }
