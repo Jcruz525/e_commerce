@@ -18,6 +18,22 @@ class CartFakeStoreCubit extends Cubit<CartFakeStoreState> {
       emit(state.copyWith(error: e.toString(), isLoading: false));
     }
   }
-  void updateItems(List<ProductModel> items) => emit(state.copyWith(products: items));
-  
+
+  void addToCart(ProductModel product) {
+    final updatedCart = List<ProductModel>.from(state.cartItems)..add(product);
+    emit(state.copyWith(cartItems: updatedCart));
+  }
+
+  void removeFromCart(ProductModel product) {
+    final updatedCart = List<ProductModel>.from(state.cartItems)
+      ..removeWhere((item) => item.id == product.id);
+    emit(state.copyWith(cartItems: updatedCart));
+  }
+
+  void clearCart() {
+    emit(state.copyWith(cartItems: []));
+  }
+
+  double get totalPrice =>
+      state.cartItems.fold(0, (sum, item) => sum + (item.price ?? 0));
 }

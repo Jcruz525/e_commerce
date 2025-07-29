@@ -1,4 +1,6 @@
+import 'package:e_commerce/features/shopping/cubit/shopping_cart_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/models/product_model.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -67,7 +69,9 @@ class ProductCard extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<CartFakeStoreCubit>().addToCart(product);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 0, 43, 78),
                         minimumSize: const Size.fromHeight(40),
