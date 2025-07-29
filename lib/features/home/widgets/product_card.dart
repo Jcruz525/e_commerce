@@ -10,53 +10,77 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-  elevation: 3,
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Image.network(product.image ?? '', height: 120, width: double.infinity, fit: BoxFit.cover),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          product.title ?? 'No Title',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis, 
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
+      elevation: 3,
+      clipBehavior: Clip.hardEdge,
+      child: Container(
+        height: 280,
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('\$${product.price?.toStringAsFixed(2) ?? '0.00'}',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            Image.network(
+              product.image ?? '',
+              height: 120,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
-            const SizedBox(width: 8),
-            RatingBarIndicator(
-              rating: 3.5,
-              itemBuilder: (context, index) => const Icon(Icons.star, color: Colors.amber),
-              itemCount: 5,
-              itemSize: 18.0,
-              direction: Axis.horizontal,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                product.title ?? 'No Title',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                children: [
+                  Text(
+                    '\$${product.price?.toStringAsFixed(2) ?? '0.00'}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: RatingBarIndicator(
+                      rating: 3.5,
+                      itemBuilder: (context, index) =>
+                          const Icon(Icons.star, color: Colors.amber),
+                      itemCount: 5,
+                      itemSize: 18.0,
+                      direction: Axis.horizontal,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 0, 43, 78),
+                        minimumSize: const Size.fromHeight(40),
+                      ),
+                      child: const Text('Add to Cart', style: TextStyle(fontSize: 12, color: Colors.white)),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
       ),
-      const Spacer(),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-            child: const Text('Add to Cart'),
-          ),
-        ),
-      ),
-    ],
-  ),
-);
-
+    );
   }
 }

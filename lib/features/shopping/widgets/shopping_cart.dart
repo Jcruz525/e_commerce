@@ -5,7 +5,7 @@ import '../cubit/shopping_cart_cubit.dart';
 
 
 class ShoppingCartPage extends StatelessWidget {
-  const ShoppingCartPage({Key? key}) : super(key: key);
+  const ShoppingCartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class ShoppingCartPage extends StatelessWidget {
               itemCount: state.products.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  //title: Text(state.products[index].product),
+                  title: Text(state.products[index].title ?? 'No Title'),
                   trailing: IconButton(
                     icon: const Icon(Icons.remove_circle_outline),
                     onPressed: () {
