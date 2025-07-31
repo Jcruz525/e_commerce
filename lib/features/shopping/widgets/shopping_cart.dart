@@ -1,18 +1,33 @@
+import 'package:e_commerce/features/checkout/widgets/checkout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:e_commerce/core/services/product_service.dart';
 import 'package:e_commerce/data/models/product_model.dart';
 import '../cubit/shopping_cart_cubit.dart';
 
 class ShoppingCartPage extends StatelessWidget {
   const ShoppingCartPage({super.key});
+  
+Map<ProductModel, int> _groupCartItems(List<ProductModel> items) {
+  final Map<ProductModel, int> groupedItems = {};
+
+  for (var item in items) {
+    if (groupedItems.containsKey(item)) {
+      groupedItems[item] = groupedItems[item]! + 1;
+    } else {
+      groupedItems[item] = 1;
+    }
+  }
+
+  return groupedItems;
+}
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CartFakeStoreCubit, CartFakeStoreState>(
       builder: (context, state) {
         final cartCubit = context.read<CartFakeStoreCubit>();
-
+final groupedCart = _groupCartItems(state.cartItems);
+final groupedItemsList = groupedCart.entries.toList();
         return Scaffold(
           appBar: AppBar(
             title: Text('Cart (${state.cartItems.length})'),
@@ -28,62 +43,76 @@ class ShoppingCartPage extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView.builder(
-                  itemCount: state.cartItems.length,
-                  itemBuilder: (context, index) {
-                    final item = state.cartItems[index];
-                    return ListTile(
-                      title: Text(item.title ?? 'No Title'),
-                      subtitle:
-                          Text('\$${item.price?.toStringAsFixed(2) ?? '0.00'}'),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.remove_circle),
-                        onPressed: () => cartCubit.removeFromCart(item),
+  itemCount: groupedItemsList.length,
+  itemBuilder: (context, index) {
+    final entry = groupedItemsList[index];
+    final item = entry.key;
+    final quantity = entry.value;
+
+    return ListTile(
+      leading: item.image != null
+          ? Image.network(
+              item.image!,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+            )
+          : const SizedBox(width: 50, height: 50), 
+      title: Text(item.title ?? 'No Title'),
+      subtitle: Text('\$${item.price?.toStringAsFixed(2) ?? '0.00'}'),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.remove),
+            onPressed: () => cartCubit.removeOne(item),
+          ),
+          Text(quantity.toString()),
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () => cartCubit.addOne(item),
+          ),
+        ],
+      ),
+    );
+  }),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        'Total: \$${cartCubit.totalPrice.toStringAsFixed(2)}',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 0, 43, 78),
+                      ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const CheckoutPage(),
                       ),
                     );
                   },
+                  child: const Text('Proceed to Checkout', style: TextStyle(color: Colors.white),),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  'Total: \$${cartCubit.totalPrice.toStringAsFixed(2)}',
-                  style: Theme.of(context).textTheme.titleLarge,
+                
+                  ],
                 ),
               ),
             ],
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => _showAddProductDialog(context, state.products),
-            tooltip: 'Add Item',
-            child: const Icon(Icons.add),
-          ),
+         
         );
       },
     );
   }
 
-  void _showAddProductDialog(
-      BuildContext context, List<ProductModel> products) {
-    showModalBottomSheet(
-      context: context,
-      builder: (_) {
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: products.length,
-          itemBuilder: (_, index) {
-            final product = products[index];
-            return ListTile(
-              title: Text(product.title ?? 'No Title'),
-              subtitle: Text(
-                  '\$${product.price?.toStringAsFixed(2) ?? '0.00'}'),
-              onTap: () {
-                context.read<CartFakeStoreCubit>().addToCart(product);
-                Navigator.pop(context);
-              },
-            );
-          },
-        );
-      },
-    );
-  }
 }

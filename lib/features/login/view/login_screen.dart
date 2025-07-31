@@ -12,7 +12,6 @@ class LoginScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => LoginCubit(),
       child: Scaffold(
-        appBar: AppBar(title: Text('Login')),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: BlocConsumer<LoginCubit, LoginState>(
@@ -26,7 +25,7 @@ class LoginScreen extends StatelessWidget {
             },
             builder: (context, state) {
               if (state is LoginLoading) {
-                return Center(child: CircularProgressIndicator());
+                return Center(child: CircularProgressIndicator(backgroundColor: const Color.fromARGB(255, 0, 43, 78),));
               }
               return LoginForm();
             },

@@ -1,3 +1,4 @@
+import 'package:e_commerce/features/product/widgets/product_screen.dart';
 import 'package:e_commerce/features/shopping/cubit/shopping_cart_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,17 +15,27 @@ class ProductCard extends StatelessWidget {
     return Card(
       elevation: 3,
       clipBehavior: Clip.hardEdge,
-      child: Container(
+      child: SizedBox(
         height: 280,
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(
-              product.image ?? '',
-              height: 120,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ProductDetailPage(product: product),
+                  ),
+                );
+              },
+              child: Image.network(
+                product.image ?? '',
+                height: 120,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -49,7 +60,7 @@ class ProductCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: RatingBarIndicator(
-                      rating: 3.5,
+                      rating: product.rating?.rate ?? 0.0,
                       itemBuilder: (context, index) =>
                           const Icon(Icons.star, color: Colors.amber),
                       itemCount: 5,
@@ -70,6 +81,20 @@ class ProductCard extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
+                       ScaffoldMessenger.of(context)
+  ..hideCurrentSnackBar() 
+  ..showSnackBar(
+    SnackBar(
+      backgroundColor: const Color.fromARGB(255, 0, 43, 78),
+      content: Text(
+        'Added to Cart!',
+        textAlign: TextAlign.center,
+        style: const TextStyle(color: Colors.white, fontSize: 16),
+      ),
+      duration: const Duration(seconds: 1),
+    ),
+  );
+
                         context.read<CartFakeStoreCubit>().addToCart(product);
                       },
                       style: ElevatedButton.styleFrom(

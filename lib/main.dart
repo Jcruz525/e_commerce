@@ -10,6 +10,7 @@ void main() {
     BlocProvider(
       create: (_) => CartFakeStoreCubit(ProductService())..fetchProducts(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: LoginScreen(),
         routes: {
           '/home': (_) => HomeScreen(),
