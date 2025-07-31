@@ -19,7 +19,13 @@ class CheckoutPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Checkout'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white, size: 30),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        backgroundColor: const Color.fromARGB(255, 0, 43, 78),
+        title: const Text('Checkout', style: TextStyle(color: Colors.white)),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -50,7 +56,7 @@ class CheckoutPage extends StatelessWidget {
                       }).toList(),
                     ),
                   ),
-                  const Divider(),
+                  const Divider(color: Color.fromARGB(255, 0, 43, 78)),
                   Text(
                     'Total: \$${cartCubit.totalPrice.toStringAsFixed(2)}',
                     style: Theme.of(context).textTheme.titleLarge,
@@ -75,7 +81,7 @@ class CheckoutPage extends StatelessWidget {
                                   Navigator.pop(context); 
                                   cartCubit.clearCart(); 
                                 },
-                                child: const Text('OK'),
+                                child: const Text('OK', style: TextStyle(color: Colors.black),),
                               )
                             ],
                           ),

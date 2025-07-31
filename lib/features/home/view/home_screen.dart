@@ -14,10 +14,12 @@ class HomeScreen extends StatelessWidget {
       create: (_) => HomeCubit(ProductService())..loadProducts(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Shop'),
+          backgroundColor: const Color.fromARGB(255, 0, 43, 78),
+          centerTitle: true,
+          title: const Text('Shop', style: TextStyle(color: Colors.white),),
           actions: [
             IconButton(
-              icon: const Icon(Icons.shopping_cart),
+              icon: const Icon(Icons.shopping_cart, color: Colors.white),
               onPressed: () => Navigator.pushNamed(context, '/shopping_cart'),
             ),
           ],

@@ -30,10 +30,16 @@ final groupedCart = _groupCartItems(state.cartItems);
 final groupedItemsList = groupedCart.entries.toList();
         return Scaffold(
           appBar: AppBar(
-            title: Text('Cart (${state.cartItems.length})'),
+            leading: IconButton(
+    icon: Icon(Icons.arrow_back, color: Colors.white, size: 30),
+    onPressed: () => Navigator.of(context).pop(),
+  ),
+            backgroundColor: const Color.fromARGB(255, 0, 43, 78),
+            title: Text('Cart (${state.cartItems.length})', style: TextStyle(color: Colors.white) ,),
+            centerTitle: true,
             actions: [
               IconButton(
-                icon: const Icon(Icons.delete),
+                icon: const Icon(Icons.delete, color: Colors.white),
                 tooltip: 'Clear Cart',
                 onPressed: () => cartCubit.clearCart(),
               ),
