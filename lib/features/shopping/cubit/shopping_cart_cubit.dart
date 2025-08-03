@@ -6,7 +6,9 @@ part 'shopping_cart_state.dart';
 class CartFakeStoreCubit extends Cubit<CartFakeStoreState> {
   final ProductService _service;
 
-  CartFakeStoreCubit(this._service) : super(const CartFakeStoreState());
+  CartFakeStoreCubit({ProductService? service})
+      : _service = service ?? ProductService(),
+        super(CartFakeStoreState());
 
   void fetchProducts() async {
     emit(state.copyWith(isLoading: true, error: null));
